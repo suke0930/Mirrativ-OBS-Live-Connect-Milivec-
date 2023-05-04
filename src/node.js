@@ -8,8 +8,8 @@ const obs = new OBSWebSocket();
 const time = 60000 * 20//配信する時間
 
 const suke = true//sukeじゃないなら切れ！
-const websocketip = ""
-const websocketkey = ""
+const websocketip = ""//とりあえずここら編いじればいいと思うンゴ
+const websocketkey = ""//
 const obspath = "C:\ミラティブ.lnk"//obsのファイルパス
 const bouyomipath = "C:\BOUYOMI.lnk"//棒読みちゃんのパス
 
