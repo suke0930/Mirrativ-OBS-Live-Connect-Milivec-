@@ -8,7 +8,7 @@ const obs = new OBSWebSocket();
 
 const time = 60000 * 20//配信する時間
 
-const suke = true//sukeじゃないなら切れ！a
+const suke = false//sukeじゃないなら切れ！a
 const config = JSON.parse(fs.readFileSync(".././config.json", 'utf8').toString());
 console.log(config)
 
@@ -25,6 +25,7 @@ const bouyomipath = "C:\BOUYOMI.lnk"//棒読みちゃんのパス
  * 
  * @param {string} url//接続先URL 
  * @param {string} key //接続先key
+ * @param {string} status2 obsの起動ステータス
  */
 
 
@@ -100,7 +101,8 @@ async function obs3(url, key, time, ws, status, suke, wantboot) {
                         //             obs.call('StopStream')
                         obs.call('StartStream');
                         ws.send('400 ok');//配信開始のws
-                        console.log("400 ok")
+                        let status2 =
+                            console.log("400 ok")
                         setTimeout(() => {
                             ws.send('500 ok');
                             console.log("500 ok")
@@ -245,9 +247,17 @@ async function main() {
 
     await wss.on('connection', async function connection(ws) {
         await ws.on('message', async function incoming(message) {
+
             const json = JSON.parse(message.toString());
             console.log('Received JSON:', json);
 
+
+            if (json.status === forrow) {
+                //フォローされたときの何かを書く
+
+
+
+            }
             if (json.status === "afk") {
                 console.log("放置厨かよ！")
 
