@@ -1,4 +1,5 @@
 const WebSocket = require('ws');
+const fs = require('fs');//FILE読み書きするやつ
 const { default: OBSWebSocket } = require('obs-websocket-js');
 const sceneName = "汎用（ミラティブ）"//使うシーンの名前
 const { exec } = require('child_process');
@@ -8,8 +9,15 @@ const obs = new OBSWebSocket();
 const time = 60000 * 20//配信する時間
 
 const suke = true//sukeじゃないなら切れ！
-const websocketip = ""//とりあえずここら編いじればいいと思うンゴ
-const websocketkey = ""//
+const config = JSON.parse(fs.readFileSync(".././config.json", 'utf8').toString());
+console.log(config)
+
+
+const websocketip = config.ip
+const websocketkey = config.token
+
+// const websocketip = ""//とりあえずここら編いじればいいと思うンゴ
+// const websocketkey = ""//
 const obspath = "C:\ミラティブ.lnk"//obsのファイルパス
 const bouyomipath = "C:\BOUYOMI.lnk"//棒読みちゃんのパス
 
