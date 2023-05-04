@@ -8,7 +8,7 @@ const obs = new OBSWebSocket();
 
 const time = 60000 * 20//配信する時間
 
-const suke = true//sukeじゃないなら切れ！
+const suke = true//sukeじゃないなら切れ！a
 const config = JSON.parse(fs.readFileSync(".././config.json", 'utf8').toString());
 console.log(config)
 
