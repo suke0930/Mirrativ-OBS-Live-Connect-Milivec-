@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Heart Animation</title>
+    <style>
+      body {
+        background-color: transparent;
+      }
+
+      .heart {
+        position: absolute;
+        display: block;
+        width: 50px;
+        height: 50px;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="createHeart('https://cdn.mirrativ.com/mirrativ-prod-assets/img/coinPurchase/pc_banner@3x.png')">Drop Heart</button>
+    <script>
+      function createHeart(imgUrl) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.backgroundImage = `url(${imgUrl})`;
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.top = window.innerHeight + 'px';
+        heart.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+        document.body.appendChild(heart);
+        const animation = heart.animate([
+          { transform: `translateY(-${window.innerHeight + 50}px) rotate(${Math.random() * 360}deg)` },
+          { transform: `translateY(${window.innerHeight + 50}px) rotate(${Math.random() * 360}deg)` }
+        ], {
+          duration: 3000 + Math.random() * 2000,
+          easing: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)',
+          fill: 'forwards'
+        });
+        animation.onfinish = () => {
+          heart.remove();
+        }
+      }
+    </script>
+  </body>
+</html>
