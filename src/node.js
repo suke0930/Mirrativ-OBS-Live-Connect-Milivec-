@@ -251,7 +251,7 @@ async function main() {
             const json = JSON.parse(message.toString());
             console.log('Received JSON:', json);
 
-
+            const forrow = "9999"//dummy
             if (json.status === forrow) {
                 //フォローされたときの何かを書く
 

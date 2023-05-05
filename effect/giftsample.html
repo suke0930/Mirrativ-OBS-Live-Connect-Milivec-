@@ -21,7 +21,10 @@
 </head>
 
 <body>
-
+  <input type="text" class="link"></input>
+  <button onclick="createer()">Drop
+    Heart</button>
+  <!-- <button onclick="createHeart('https://pbs.twimg.com/media/FvR85A5XsAIhL_G?format=jpg')">Drop Heart2</button> -->
   <script>
     function createHeart(imgUrl) {
       const heart = document.createElement('div');
@@ -42,9 +45,38 @@
       animation.onfinish = () => {
         heart.remove();
       }
+    }
+
+
+
+    function createer() { //テスト用関数
+      const msg = document.querySelector('.link')
+      console.log(msg)
+      const msg2 = msg.value
+      createHeart(msg2);
 
     }
-    createHeart('https://cdn.mirrativ.com/mirrativ-prod-assets/img/coinPurchase/pc_banner@3x.png')
+    function opensocket() {
+      const socket = new WebSocket('ws://localhost:4455');//ソケっとの定義
+      socket.addEventListener('open', event => {
+        console.log('サーバーに接続しました。');
+      });
+
+      socket.addEventListener('message', event => {
+        if (event.data === 'gift') {
+          createHeart();
+        }
+      });
+
+      socket.addEventListener('error', event => {
+        console.error('WebSocket接続エラー:', event);
+        setTimeout(() => {
+          opensocket();
+        }, 3000);
+
+        // alart("サーバ落ちてないこれ？")
+      });
+    }
   </script>
 </body>
 
