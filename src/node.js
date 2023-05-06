@@ -1,15 +1,23 @@
 const WebSocket = require('ws');
+const fs = require('fs');//FILE読み書きするやつ
 const { default: OBSWebSocket } = require('obs-websocket-js');
 const sceneName = "汎用（ミラティブ）"//使うシーンの名前
 const { exec } = require('child_process');
 //const OBSWebSocket = require('obs-websocket-js');
 const obs = new OBSWebSocket();
-
+let effecters = []//エフェクターを複数化するための機構
 const time = 60000 * 20//配信する時間
 
-const suke = true//sukeじゃないなら切れ！
-const websocketip = ""
-const websocketkey = ""
+const suke = false//sukeじゃないなら切れ！a
+const config = JSON.parse(fs.readFileSync(".././config.json", 'utf8').toString());
+//console.log(config)
+
+
+const websocketip = config.ip
+const websocketkey = config.token
+
+// const websocketip = ""//とりあえずここら編いじればいいと思うンゴ
+// const websocketkey = ""//
 const obspath = "C:\ミラティブ.lnk"//obsのファイルパス
 const bouyomipath = "C:\BOUYOMI.lnk"//棒読みちゃんのパス
 
@@ -17,6 +25,7 @@ const bouyomipath = "C:\BOUYOMI.lnk"//棒読みちゃんのパス
  * 
  * @param {string} url//接続先URL 
  * @param {string} key //接続先key
+ * @param {string} status2 obsの起動ステータス
  */
 
 
@@ -92,7 +101,8 @@ async function obs3(url, key, time, ws, status, suke, wantboot) {
                         //             obs.call('StopStream')
                         obs.call('StartStream');
                         ws.send('400 ok');//配信開始のws
-                        console.log("400 ok")
+                        let status2 =
+                            console.log("400 ok")
                         setTimeout(() => {
                             ws.send('500 ok');
                             console.log("500 ok")
@@ -215,6 +225,10 @@ async function soureactive(name, status) {//ソースの有効無効を簡単に
     );
 
 }
+/**
+ * OBSを起動するだけ
+ * @param {string} obspath obsのファイルパス 
+ */
 async function obsstart(obspath) {//obs起動
 
     exec('start ' + obspath, (error, stdout, stderr) => {
@@ -235,10 +249,63 @@ async function obsstart(obspath) {//obs起動
 async function main() {
     const wss = new WebSocket.Server({ port: 8877 });
 
-    await wss.on('connection', async function connection(ws) {
-        await ws.on('message', async function incoming(message) {
+    await wss.on('connection', async function connection(ws) {//コネクション
+
+
+
+        await ws.on('message', async function incoming(message) {//メッセージ受信時の挙動
+            /**
+             * @param {object} json 色んなとこから飛んでくるwsパケットの中身。
+             * @param {string} json.effect 指定する中身。フォローとかギフトとか
+             * @param {value} json.value 送られてきたギフトの中身。
+             * @param {string} json.data ギフトの種類とか
+             * @param {string} json.name ギフトもしくはフォローしてくれた人の名前
+             */
+
+
             const json = JSON.parse(message.toString());
-            console.log('Received JSON:', json);
+            console.log(json)
+            //    console.log('Received JSON:', json);
+
+            //      const forrow = "9999"//dummy
+
+
+
+            //       status === 'commentlisner'
+            if (json.status === "commentlisner") {
+                console.log("WAIT WHAT")
+                if (json.effect === "forrow") {
+                    //  フォローされたときの何かを書く
+
+                }
+                if (json.effect === "gift") {
+                    //
+                    console.log("ギフトされたときの何かを書く")
+
+                    effecters.forEach(function (wsss) {
+                        console.log("なしてこうなった？")
+                        sendeffect(wsss, json);
+                    });
+
+
+                }
+                if (json.effect === "open") {
+                    //初期接続か何かを書く
+
+                }
+
+            }
+
+
+            if (json.status === "effecter") {
+                effecters.push(ws)//エフェクトを+する
+                console.log("このインスタンスを登録しました")
+            }
+
+            // if (json.status === "media") {
+            //     //OBSのエフェクトウィンドウがオンラインのときの何かを書く
+            //     ws.send("SERVER IS OK")
+            // }
 
             if (json.status === "afk") {
                 console.log("放置厨かよ！")
@@ -258,6 +325,80 @@ async function main() {
         });
     });
 };
+
+
+
+/**
+ * @param {Object} wsss wssocketのインスタンス
+ * @param {object} json 色んなとこから飛んでくるwsパケットの中身。
+ * @param {string} json.effect 指定する中身。フォローとかギフトとか
+ * @param {value} json.value 送られてきたギフトの中身。
+ * @param {string} json.data ギフトの種類とか
+ * @param {string} json.name ギフトもしくはフォローしてくれた人の名前
+ */
+async function sendeffect(wsss, json) {
+
+    //ここで相手のインスタンスが生きてるか確認する
+    // const mesg2 = { data: "元気ですかー！？" };
+    // const mesg = JSON.stringify(mesg2);
+    // wsss.send(mesg)
+
+    // try {
+    //     const timeoutId = setTimeout(function () {
+    //         // タイムアウトが発生したら、エラーメッセージを出力してWebSocket接続を閉じる
+    //         //   console.error('WebSocket接続がタイムアウトしました。');
+    //         //  ws.close();
+    //         throw "このインスタンスしんでるわ"
+    //     }, timeoutMs);
+
+    // "Ready!"というメッセージを受信したときの処理を定義する
+    //   ws.on('message', function (message3) {
+    //   const message = JSON.parse(message3).data;
+    //   if (message === '元気ですよー！！!') {
+    //     clearTimeout(timeoutId);//これでタイムアウトをキャンセル
+    /**
+     * @param EDdata parseしたあとのjson。こいつを送信する
+     */
+    console.log(json.data)
+    const URL = URLRQ(json.data)
+    console.log("えぇ...")
+    console.log(URL)
+
+
+
+    const EDdata = JSON.stringify({
+        effect: "gift",
+        value: json.value,
+        name: json.name,
+        data: URL//URLを問い合わせる
+    });
+
+
+    // const AODATA = JSON.stringify(EDdata)//送信パージ
+    console.log("パージ送信")
+    console.log(EDdata)
+    wsss.send(EDdata);
+    //   }
+    //   });
+
+
+
+
+    //    } catch (error) { }
+};
+function URLRQ(NAME) {
+    if (NAME.indexOf("ハート") != -1) {
+        console.log("ハート代入")
+        return "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/heart.png";
+
+    }
+    if (NAME.indexOf("星") != -1) {
+        console.log("星代入")
+        return "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/star.png"
+
+    }
+
+}
 main();
 
 

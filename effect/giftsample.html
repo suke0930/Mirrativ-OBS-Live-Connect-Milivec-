@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Heart Animation</title>
+  <style>
+    body {
+      background-color: transparent;
+    }
+
+    .heart {
+      position: absolute;
+      display: block;
+      width: 50px;
+      height: 50px;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <input type="text" class="link"></input>
+  <button onclick="createer()">Drop
+    Heart</button> -->
+  <!-- <button onclick="createHeart('https://pbs.twimg.com/media/FvR85A5XsAIhL_G?format=jpg')">Drop Heart2</button> -->
+  <script>
+    const timeoutMs = 30;
+
+
+
+
+    async function createHeart(imgUrl) {
+      console.log("おはな")
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.backgroundImage = `url(${imgUrl})`;
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.top = window.innerHeight + 'px';
+      heart.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+      document.body.appendChild(heart);
+      const animation = heart.animate([
+        { transform: `translateY(-${window.innerHeight + 50}px) rotate(${Math.random() * 360}deg)` },
+        { transform: `translateY(${window.innerHeight + 50}px) rotate(${Math.random() * 360}deg)` }
+      ], {
+        duration: 3000 + Math.random() * 2000,
+        easing: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)',
+        fill: 'forwards'
+      });
+      animation.onfinish = () => {
+        heart.remove();
+      }
+    }
+
+
+
+
+    function createer() { //テスト用関数
+      const msg = document.querySelector('.link')
+      console.log(msg)
+      const msg2 = msg.value
+      createHeart(msg2);
+
+    }
+
+    async function opensocket() {
+      const socket = new WebSocket('ws://localhost:8877');//ソケっとの定義
+      socket.addEventListener('open', event => {
+        console.log();
+        console.log('サーバーに接続しました。');
+
+        const defaults = {
+          status: "effecter"
+        }
+
+        socket.send(JSON.stringify(defaults));
+      });
+
+      await socket.addEventListener('message', async function asshole(message) {
+
+
+
+        // if (message.data === "元気ですかー！？") {//生存確認
+        //   const data77 = { data: "元気ですよー！！" }
+        //   const data777 = JSON.stringify(data77);
+        //   socket.send(data777)
+        // }
+        const message2 = JSON.parse(message.data);
+        console.log(message2.effect)
+        //   gift
+        if (message2.effect === 'gift') {
+          console.log("はい？")
+          //if (json.data === "ハート") { const gift = "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/heart.png" };
+          //  if (json.data === "星") { const gift = "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/star.png" };
+          const alhpa = message2.value;
+          //    console.log(alhpa)
+          const C = alhpa.slice(0, alhpa.length - 1);
+          const blabo = Number(C)
+          console.log(blabo)
+
+          for (let i = 0; i < blabo; i++) {
+            console.log(i)
+            createHeart(message2.data)
+          }
+          //createHeart();
+        }
+      });
+
+      socket.addEventListener('error', event => {
+        console.error('WebSocket接続エラー:', event);
+        setTimeout(() => {
+          opensocket();
+        }, 3000);
+
+        // alart("サーバ落ちてないこれ？")
+      });
+    }
+    opensocket();
+  </script>
+</body>
+
+</html>
