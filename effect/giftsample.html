@@ -21,9 +21,9 @@
 </head>
 
 <body>
-  <input type="text" class="link"></input>
+  <!-- <input type="text" class="link"></input>
   <button onclick="createer()">Drop
-    Heart</button>
+    Heart</button> -->
   <!-- <button onclick="createHeart('https://pbs.twimg.com/media/FvR85A5XsAIhL_G?format=jpg')">Drop Heart2</button> -->
   <script>
     const timeoutMs = 30;
@@ -32,6 +32,7 @@
 
 
     async function createHeart(imgUrl) {
+      console.log("おはな")
       const heart = document.createElement('div');
       heart.classList.add('heart');
       heart.style.backgroundImage = `url(${imgUrl})`;
@@ -63,7 +64,7 @@
 
     }
 
-    function opensocket() {
+    async function opensocket() {
       const socket = new WebSocket('ws://localhost:8877');//ソケっとの定義
       socket.addEventListener('open', event => {
         console.log();
@@ -73,26 +74,34 @@
           status: "effecter"
         }
 
-        ws.send(JSON.stringify(defaults));
+        socket.send(JSON.stringify(defaults));
       });
 
-      socket.addEventListener('message', message => {
+      await socket.addEventListener('message', async function asshole(message) {
 
-        const json = JSON.parse(message.toString());
 
-        if (json.data === "元気ですかー！？") {//生存確認
-          const data77 = { data: "元気ですよー！！" }
-          const data777 = JSON.stringify(data77);
-          socket.send(data777)
-        }
 
-        if (json.effect === 'gift') {
-
+        // if (message.data === "元気ですかー！？") {//生存確認
+        //   const data77 = { data: "元気ですよー！！" }
+        //   const data777 = JSON.stringify(data77);
+        //   socket.send(data777)
+        // }
+        const message2 = JSON.parse(message.data);
+        console.log(message2.effect)
+        //   gift
+        if (message2.effect === 'gift') {
+          console.log("はい？")
           //if (json.data === "ハート") { const gift = "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/heart.png" };
           //  if (json.data === "星") { const gift = "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/star.png" };
+          const alhpa = message2.value;
+          //    console.log(alhpa)
+          const C = alhpa.slice(0, alhpa.length - 1);
+          const blabo = Number(C)
+          console.log(blabo)
 
-          for (let i = 0; i === json.value; i++) {
-            createHeart(json.data)
+          for (let i = 0; i < blabo; i++) {
+            console.log(i)
+            createHeart(message2.data)
           }
           //createHeart();
         }
@@ -107,6 +116,7 @@
         // alart("サーバ落ちてないこれ？")
       });
     }
+    opensocket();
   </script>
 </body>
 

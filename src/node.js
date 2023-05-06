@@ -10,7 +10,7 @@ const time = 60000 * 20//配信する時間
 
 const suke = false//sukeじゃないなら切れ！a
 const config = JSON.parse(fs.readFileSync(".././config.json", 'utf8').toString());
-console.log(config)
+//console.log(config)
 
 
 const websocketip = config.ip
@@ -264,18 +264,23 @@ async function main() {
 
 
             const json = JSON.parse(message.toString());
+            console.log(json)
             //    console.log('Received JSON:', json);
 
             //      const forrow = "9999"//dummy
-            if (json.status === "commentlisner") {
 
+
+
+            //       status === 'commentlisner'
+            if (json.status === "commentlisner") {
+                console.log("WAIT WHAT")
                 if (json.effect === "forrow") {
-                    //フォローされたときの何かを書く
+                    //  フォローされたときの何かを書く
 
                 }
                 if (json.effect === "gift") {
-                    //ギフトされたときの何かを書く
-
+                    //
+                    console.log("ギフトされたときの何かを書く")
 
                     effecters.forEach(function (wsss) {
                         console.log("なしてこうなった？")
@@ -334,45 +339,64 @@ async function main() {
 async function sendeffect(wsss, json) {
 
     //ここで相手のインスタンスが生きてるか確認する
-    const mesg2 = { data: "元気ですかー！？" };
-    const mesg = JSON.stringify(mesg2);
-    wsss.send(mesg2)
+    // const mesg2 = { data: "元気ですかー！？" };
+    // const mesg = JSON.stringify(mesg2);
+    // wsss.send(mesg)
 
-    try {
-        const timeoutId = setTimeout(function () {
-            // タイムアウトが発生したら、エラーメッセージを出力してWebSocket接続を閉じる
-            //   console.error('WebSocket接続がタイムアウトしました。');
-            //  ws.close();
-            throw "このインスタンスしんでるわ"
-        }, timeoutMs);
+    // try {
+    //     const timeoutId = setTimeout(function () {
+    //         // タイムアウトが発生したら、エラーメッセージを出力してWebSocket接続を閉じる
+    //         //   console.error('WebSocket接続がタイムアウトしました。');
+    //         //  ws.close();
+    //         throw "このインスタンスしんでるわ"
+    //     }, timeoutMs);
 
-        // "Ready!"というメッセージを受信したときの処理を定義する
-        ws.on('message', function (message3) {
-            const message = JSON.parse(message3).data;
-            if (message === '元気ですよー！！!') {
-                clearTimeout(timeoutId);//これでタイムアウトをキャンセル
-                /**
-                 * @param EDdata parseしたあとのjson。こいつを送信する
-                 */
-                const URL = URLRQ(json.data)
-                const EDdata = {
-                    effect: "gift",
-                    value: json.value,
-                    name: json.name,
-                    data: URL//URLを問い合わせる
-                }
-                wsss.send(JSON.stringify(EDdata));
-            }
-        });
+    // "Ready!"というメッセージを受信したときの処理を定義する
+    //   ws.on('message', function (message3) {
+    //   const message = JSON.parse(message3).data;
+    //   if (message === '元気ですよー！！!') {
+    //     clearTimeout(timeoutId);//これでタイムアウトをキャンセル
+    /**
+     * @param EDdata parseしたあとのjson。こいつを送信する
+     */
+    console.log(json.data)
+    const URL = URLRQ(json.data)
+    console.log("えぇ...")
+    console.log(URL)
 
 
 
+    const EDdata = JSON.stringify({
+        effect: "gift",
+        value: json.value,
+        name: json.name,
+        data: URL//URLを問い合わせる
+    });
 
-    } catch (error) { }
+
+    // const AODATA = JSON.stringify(EDdata)//送信パージ
+    console.log("パージ送信")
+    console.log(EDdata)
+    wsss.send(EDdata);
+    //   }
+    //   });
+
+
+
+
+    //    } catch (error) { }
 };
-async function URLRQ(NAME) {
-    if (NAME.indexof("ハート") != -1) { return "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/heart.png"; }
-    if (NAME.indexof("星") != -1) { return "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/star.png" }
+function URLRQ(NAME) {
+    if (NAME.indexOf("ハート") != -1) {
+        console.log("ハート代入")
+        return "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/heart.png";
+
+    }
+    if (NAME.indexOf("星") != -1) {
+        console.log("星代入")
+        return "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/star.png"
+
+    }
 
 }
 main();
