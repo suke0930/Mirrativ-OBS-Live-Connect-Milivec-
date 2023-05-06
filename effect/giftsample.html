@@ -56,10 +56,13 @@
       createHeart(msg2);
 
     }
+
     function opensocket() {
-      const socket = new WebSocket('ws://localhost:4455');//ソケっとの定義
+      const socket = new WebSocket('ws://localhost:8877');//ソケっとの定義
       socket.addEventListener('open', event => {
+        console.log()
         console.log('サーバーに接続しました。');
+        ws.send('')
       });
 
       socket.addEventListener('message', event => {

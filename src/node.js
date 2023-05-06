@@ -5,7 +5,7 @@ const sceneName = "汎用（ミラティブ）"//使うシーンの名前
 const { exec } = require('child_process');
 //const OBSWebSocket = require('obs-websocket-js');
 const obs = new OBSWebSocket();
-
+let effecters = []//エフェクターを複数化するための機構
 const time = 60000 * 20//配信する時間
 
 const suke = false//sukeじゃないなら切れ！a
@@ -245,19 +245,43 @@ async function obsstart(obspath) {//obs起動
 async function main() {
     const wss = new WebSocket.Server({ port: 8877 });
 
-    await wss.on('connection', async function connection(ws) {
-        await ws.on('message', async function incoming(message) {
+    await wss.on('connection', async function connection(ws) {//コネクション
+
+
+
+        await ws.on('message', async function incoming(message) {//メッセージ受信時の挙動
 
             const json = JSON.parse(message.toString());
             console.log('Received JSON:', json);
 
             const forrow = "9999"//dummy
-            if (json.status === forrow) {
-                //フォローされたときの何かを書く
+            if (json.status === "commentlisner") {
+
+                if (json.effect === "forrow") {
+                    //フォローされたときの何かを書く
+                }
+                if (json.effect === "gift") {
+                    //ギフトされたときの何かを書く
+                }
+                if (json.effect === "open") {
+                    //初期接続か何かを書く
+                }
 
 
 
             }
+
+
+            if (json.status === "effecter") {
+                effecters.push(ws)//エフェクトを+する
+                console.log("このインスタンスを登録しました")
+            }
+
+            if (json.status === "media") {
+                //OBSのエフェクトウィンドウがオンラインのときの何かを書く
+                ws.send("SERVER IS OK")
+            }
+
             if (json.status === "afk") {
                 console.log("放置厨かよ！")
 
