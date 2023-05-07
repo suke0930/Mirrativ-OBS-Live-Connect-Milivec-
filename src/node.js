@@ -9,7 +9,7 @@ let effecters = []//エフェクターを複数化するための機構
 const time = 60000 * 20//配信する時間
 
 const suke = false//sukeじゃないなら切れ！a
-const config = JSON.parse(fs.readFileSync(".././config.json", 'utf8').toString());
+const config = JSON.parse(fs.readFileSync("./config/config.json", 'utf8').toString());
 //console.log(config)
 
 
@@ -375,8 +375,8 @@ async function sendeffect(wsss, json) {
 
 
     // const AODATA = JSON.stringify(EDdata)//送信パージ
-    console.log("パージ送信")
-    console.log(EDdata)
+    console.log("パージ送信");
+    console.log(EDdata);
     wsss.send(EDdata);
     //   }
     //   });
