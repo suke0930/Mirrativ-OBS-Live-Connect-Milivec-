@@ -26,6 +26,14 @@ Mirattiv_cmなどと連携させることを前提としています。
 1. 動作サンプル
     1. https://htmlpreview.github.io/?https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/master/effect/giftsample.html (こちらをOBSブラウザソースとして追加することで、MirattivCMと連携しギフトやフォローなどの情報をOBSに反映させエフェクトを表示できます。)
 
+
+
+# 動作サンプルについて
+Mirattiv_CMで取得した情報を本サーバーを通して受信し、画面にギフト（星やハート）を降らせることが可能なサンプルです。
+そのまま使うことも可能ですが、今のところ存在しないAPIについての情報（そのうちつくる）を取得できます。
+そのまま使用する際は本サーバーを起動した上で、obsにブラウザソースとして追加してください。
+
+
 # 必認事項
 実行ファイルと同ディレクトリにある"/config/"の中にconfig.jsonが必要です。
 obs-websocketのIPとパスワードを以下の形式で記述してください。
