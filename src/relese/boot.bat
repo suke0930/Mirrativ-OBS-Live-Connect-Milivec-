@@ -1,2 +1,0 @@
-node-win.exe
-pause
