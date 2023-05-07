@@ -8,7 +8,7 @@ const obs = new OBSWebSocket();
 let effecters = []//エフェクターを複数化するための機構
 const time = 60000 * 20//配信する時間
 
-const suke = false//sukeじゃないなら切れ！a
+const suke = false//sukeじゃないなら切れ！
 const config = JSON.parse(fs.readFileSync("./config/config.json", 'utf8').toString());
 //console.log(config)
 
