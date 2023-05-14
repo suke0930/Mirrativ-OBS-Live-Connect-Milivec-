@@ -41,7 +41,9 @@ obs-websocketのIPとパスワードを以下の形式で記述してくださ�
 ```
 {
     "ip": "ws://localhost:4455",
-    "token": "YOURPASSWORDHERE"
+    "token": "YOURPASSWORDHERE",
+    "bouyomi": "棒読みちゃんのショートカットのパス.lnk",
+    "OBS": "obsのショートカットのパス.lnk"
 }
 ```
 ## スタートアップ登録について
