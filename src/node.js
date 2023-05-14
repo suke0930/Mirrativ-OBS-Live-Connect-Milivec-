@@ -19,8 +19,8 @@ const websocketkey = config.token
 
 // const websocketip = ""//とりあえずここら編いじればいいと思うンゴ
 // const websocketkey = ""//
-const obspath = config.bouyomi //obsのパス
-const bouyomipath = config.OBS //"C:\BOUYOMI.lnk"//棒読みちゃんのパス
+const obspath = config.OBS //obsのパス
+const bouyomipath = config.bouyomi //"C:\BOUYOMI.lnk"//棒読みちゃんのパス
 
 /**
  * 
