@@ -224,9 +224,9 @@ async function soureactive(name, status) {//ソースの有効無効を簡単に
 
 /**
  * 棒読みちゃんの起動を関数化
- * @param {string} bouyomiboot 
+ * @param {string} bouyomipath 
  */
-function bouyomiboot(bouyomiboot) {
+function bouyomiboot(bouyomipath) {
     exec('start ' + bouyomipath, (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
