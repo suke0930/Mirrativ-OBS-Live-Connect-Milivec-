@@ -13,7 +13,7 @@ const time = 60000 * 20//配信する時間
 const suke = false//sukeじゃないなら切れ！
 const config = JSON.parse(fs.readFileSync("./config/config.json", 'utf8').toString());
 //console.log(config)
-
+//a
 
 const websocketip = config.ip
 const websocketkey = config.token
