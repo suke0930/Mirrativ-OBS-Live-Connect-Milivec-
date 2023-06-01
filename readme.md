@@ -1,3 +1,4 @@
+<img src="http://counter.seku.su/cmoe?name=sukeMILVEC&theme=r34" alt="sukeMILVEC" /><br>
 # 概要
 ミラティブとobsを繋げ、OBSの自動操作やギフトなどの情報の受け取りなどのAPIを管理するサーバーです。
 Mirattiv_cmなどと連携させることを前提としています。

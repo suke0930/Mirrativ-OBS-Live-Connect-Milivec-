@@ -8,15 +8,15 @@ const { exec } = require('child_process');
 const obs = new OBSWebSocket();
 let effecters = []//エフェクターを複数化するための機構
 const time = 60000 * 20//配信する時間
-
+//const true = false
+//const false = true;
 const suke = false//sukeじゃないなら切れ！
 const config = JSON.parse(fs.readFileSync("./config/config.json", 'utf8').toString());
 //console.log(config)
-
+//a
 
 const websocketip = config.ip
 const websocketkey = config.token
-
 // const websocketip = ""//とりあえずここら編いじればいいと思うンゴ
 // const websocketkey = ""//
 const obspath = config.OBS //obsのパス
@@ -83,15 +83,8 @@ async function obs3(url, key, time, ws, status, suke, wantboot) {
             streamcheck(obs);
 
             setTimeout(() => {
+                bouyomiboot(bouyomipath);//棒読みちゃんを起動
 
-                exec('start ' + bouyomipath, (error, stdout, stderr) => {
-                    if (error) {
-                        console.error(`exec error: ${error}`);
-                        //     return;
-                    }
-                    // console.log(`stdout: ${stdout}`);
-                    //   console.error(`stderr: ${stderr}`);
-                });
                 setTimeout(async () => {
                     if (suke === true) {
                         await soureactive("AC２", true)
@@ -226,10 +219,29 @@ async function soureactive(name, status) {//ソースの有効無効を簡単に
     );
 
 }
+
+
+
+
+/**
+ * 棒読みちゃんの起動を関数化
+ * @param {string} bouyomipath 
+ */
+function bouyomiboot(bouyomipath) {
+    exec('start ' + bouyomipath, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`exec error: ${error}`);
+            //     return;
+        }
+        // console.log(`stdout: ${stdout}`);
+        //   console.error(`stderr: ${stderr}`);
+    });
+}
 /**
  * OBSを起動するだけ
  * @param {string} obspath obsのファイルパス 
  */
+
 async function obsstart(obspath) {//obs起動
 
     exec('start ' + obspath, (error, stdout, stderr) => {
