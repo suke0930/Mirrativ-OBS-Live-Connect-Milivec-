@@ -1,4 +1,4 @@
-//version 1.0
+//version 1.1
 const WebSocket = require('ws');
 const fs = require('fs');//FILE読み書きするやつ
 const { default: OBSWebSocket } = require('obs-websocket-js');
