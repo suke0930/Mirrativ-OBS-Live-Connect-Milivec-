@@ -1,4 +1,4 @@
-//version 1.0
+//version 1.2
 const WebSocket = require('ws');
 const fs = require('fs');//FILE読み書きするやつ
 const { default: OBSWebSocket } = require('obs-websocket-js');
@@ -22,16 +22,34 @@ const websocketkey = config.token
 const obspath = config.OBS //obsのパス
 const bouyomipath = config.bouyomi //"C:\BOUYOMI.lnk"//棒読みちゃんのパス
 
+
+
+const check_stream_status = async function (obs, ws) {
+
+
+    const sendws = async function (event) {
+        console.log("トリガー済み")
+        console.log(event)
+        if (event.outputActive === true) {
+            //     console.log("true")
+            ws.send("hasstartstream")
+            obs.removeListener("StreamStateChanged", sendws)
+        }
+        if (event.outputActive === false) {
+            //    console.log("false")
+
+        }
+
+    }
+    obs.addListener("StreamStateChanged", sendws)
+}
+
 /**
  * 
  * @param {string} url//接続先URL 
  * @param {string} key //接続先key
  * @param {string} status2 obsの起動ステータス
  */
-
-
-
-
 async function setrtmp(url, key) {
     const rtmp_custom = {
         server: url,
@@ -95,8 +113,8 @@ async function obs3(url, key, time, ws, status, suke, wantboot) {
                         //             obs.call('StopStream')
                         obs.call('StartStream');
                         ws.send('400 ok');//配信開始のws
-                        let status2 =
-                            console.log("400 ok")
+                        console.log("400 ok")
+
                         setTimeout(() => {
                             ws.send('500 ok');
                             console.log("500 ok")
@@ -159,14 +177,13 @@ async function obs3(url, key, time, ws, status, suke, wantboot) {
                     await setrtmp(url, key)//後で要変更
                     setTimeout(() => {
                         //        obs.call('StopStream')
-
-
-
-
-
                         obs.call('StartStream');
                         ws.send('400 ok');//配信開始のws
                         console.log("400 ok")
+
+                        //ここになんかかく™
+                        check_stream_status(obs, ws);
+
                     }, 1000);
 
                 }, 1000);
@@ -326,7 +343,7 @@ async function main() {
                 obs3(json.url, json.key, time, ws, json.status, suke, true);
             }
             if (json.status === "nonafk") {
-                console.log("非放置厨みたいなオワコンミラティブに住んでる私はどうすりゃいいですか?")
+
 
                 obs3(json.url, json.key, time, ws, json.status, suke, true);
             }
