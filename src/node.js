@@ -23,7 +23,7 @@ const obspath = config.OBS //obsのパス
 const bouyomipath = config.bouyomi //"C:\BOUYOMI.lnk"//棒読みちゃんのパス
 
 
-
+console.log("メスガキオンライン！")
 const check_stream_status = async function (obs, ws) {
 
 
