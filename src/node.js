@@ -1,4 +1,4 @@
-//version 1.1
+//version 1.2
 const WebSocket = require('ws');
 const fs = require('fs');//FILE読み書きするやつ
 const { default: OBSWebSocket } = require('obs-websocket-js');
@@ -343,7 +343,7 @@ async function main() {
                 obs3(json.url, json.key, time, ws, json.status, suke, true);
             }
             if (json.status === "nonafk") {
-                console.log("非放置厨みたいなオワコンミラティブに住んでる私はどうすりゃいいですか?")
+
 
                 obs3(json.url, json.key, time, ws, json.status, suke, true);
             }
