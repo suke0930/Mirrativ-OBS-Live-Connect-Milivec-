@@ -89,7 +89,7 @@
         const message2 = JSON.parse(message.data);
         console.log(message2.effect)
         //   gift
-        if (message2.effect === 'gift') {
+        if (message2.effect === 'gift') {//クソコードすぎ死ね
           console.log("はい？")
           //if (json.data === "ハート") { const gift = "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/heart.png" };
           //  if (json.data === "星") { const gift = "https://raw.githubusercontent.com/suke0930/Mirrativ-OBS-Live-Connect-Milivec-/dev/assetes/star.png" };
@@ -97,15 +97,20 @@
           //    console.log(alhpa)
           const C = alhpa.slice(0, alhpa.length - 1);
           const blabo = Number(C)
-          console.log(blabo)
+          //    console.log(blabo)
 
           for (let i = 0; i < blabo; i++) {
-            console.log(i)
+            //    console.log(i)
             createHeart(message2.data)
           }
           //createHeart();
         }
       });
+      if (message2.effect === 'forrow') {
+        const name = message2.name
+
+        //フォロー時のエフェクトを実装する
+      }
 
       socket.addEventListener('error', event => {
         console.error('WebSocket接続エラー:', event);
