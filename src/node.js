@@ -1,4 +1,4 @@
-//version 1.2
+console.log("version 1.4")
 const WebSocket = require('ws');
 const fs = require('fs');//FILE読み書きするやつ
 const { default: OBSWebSocket } = require('obs-websocket-js');
@@ -302,28 +302,8 @@ async function main() {
 
 
             //       status === 'commentlisner'
-            if (json.status === "commentlisner") {
-                console.log("WAIT WHAT")
-                if (json.effect === "forrow") {
-                    //  フォローされたときの何かを書く
-
-                }
-                if (json.effect === "gift") {
-                    //
-                    console.log("ギフトされたときの何かを書く")
-
-                    effecters.forEach(function (wsss) {
-                        console.log("なしてこうなった？")
-                        sendeffect(wsss, json);
-                    });
-
-
-                }
-                if (json.effect === "open") {
-                    //初期接続か何かを書く
-
-                }
-
+            if (json.status === "commentlisner") {//Mirattiv_cmから応答があれば
+                sendeffect(wsss, json);
             }
 
 
@@ -332,10 +312,7 @@ async function main() {
                 console.log("このインスタンスを登録しました")
             }
 
-            // if (json.status === "media") {
-            //     //OBSのエフェクトウィンドウがオンラインのときの何かを書く
-            //     ws.send("SERVER IS OK")
-            // }
+
 
             if (json.status === "afk") {
                 console.log("放置厨かよ！")
@@ -356,9 +333,21 @@ async function main() {
     });
 };
 
-
-
 /**
+ * いつかまとめるAPI
+ * json.effect = "gift" or "effect"
+ *  送られてくるものの中身の判別用
+ * 
+ * json.name
+ *  ギフトもしくはフォローしてくれた人の名前
+ * json.data
+ *  ギフトの種類
+ * json.value
+ *  送られてきたギフトの数
+ * 
+ */
+
+/**　ここでOBS向けのエフェクターに飛ばすパケットのAPIを定義する
  * @param {Object} wsss wssocketのインスタンス
  * @param {object} json 色んなとこから飛んでくるwsパケットの中身。
  * @param {string} json.effect 指定する中身。フォローとかギフトとか
@@ -368,53 +357,39 @@ async function main() {
  */
 async function sendeffect(wsss, json) {
 
-    //ここで相手のインスタンスが生きてるか確認する
-    // const mesg2 = { data: "元気ですかー！？" };
-    // const mesg = JSON.stringify(mesg2);
-    // wsss.send(mesg)
-
-    // try {
-    //     const timeoutId = setTimeout(function () {
-    //         // タイムアウトが発生したら、エラーメッセージを出力してWebSocket接続を閉じる
-    //         //   console.error('WebSocket接続がタイムアウトしました。');
-    //         //  ws.close();
-    //         throw "このインスタンスしんでるわ"
-    //     }, timeoutMs);
-
-    // "Ready!"というメッセージを受信したときの処理を定義する
-    //   ws.on('message', function (message3) {
-    //   const message = JSON.parse(message3).data;
-    //   if (message === '元気ですよー！！!') {
-    //     clearTimeout(timeoutId);//これでタイムアウトをキャンセル
-    /**
-     * @param EDdata parseしたあとのjson。こいつを送信する
-     */
-    console.log(json.data)
-    const URL = URLRQ(json.data)
-    console.log("えぇ...")
-    console.log(URL)
-
-
-
-    const EDdata = JSON.stringify({
-        effect: "gift",
-        value: json.value,
-        name: json.name,
-        data: URL//URLを問い合わせる
-    });
-
-
-    // const AODATA = JSON.stringify(EDdata)//送信パージ
-    console.log("パージ送信");
-    console.log(EDdata);
-    wsss.send(EDdata);
-    //   }
-    //   });
+    if (json.effect === "gift") {
+        console.log(json.data)
+        const URL = URLRQ(json.data)
+        console.log(URL)
+        const EDdata = JSON.stringify({
+            effect: "gift",
+            value: json.value,
+            name: json.name,
+            data: URL//URLを問い合わせる
+        });
+        // const AODATA = JSON.stringify(EDdata)//送信パージ
+        console.log("パージ送信");
+        console.log(EDdata);
+        wsss.send(EDdata);
+        //   }
+        //   });
 
 
 
 
-    //    } catch (error) { }
+        //    } catch (error) { }
+    }
+    if (json.effect === "forrow") {
+        const EDdata = JSON.stringify({
+            effect: "forrow",
+            name: json.name,
+        });
+        // const AODATA = JSON.stringify(EDdata)//送信パージ
+        console.log("パージ送信");
+        console.log(EDdata);
+        wsss.send(EDdata);
+    }
+
 };
 function URLRQ(NAME) {
     if (NAME.indexOf("ハート") != -1) {
